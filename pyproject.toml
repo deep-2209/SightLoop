@@ -9,4 +9,10 @@ requires-python = ">=3.12"
 dependencies = ["pybullet", "numpy", "pillow"]
 
 [tool.setuptools.packages.find]
-where = ["src"]
+wherex = ["src"]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
