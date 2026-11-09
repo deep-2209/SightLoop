@@ -110,3 +110,38 @@ def set_gripper(
                 settled = True
                 break
     return GripperResult(gripper_width(sim), settled, steps)
+
+
+MIN_HELD_WIDTH = 0.01  # m: below this the fingers are essentially closed on nothing
+
+@dataclass(frozen=True)
+class PickResult:
+    success: bool
+    reason: str  # ok | approach_failed | descend_failed | gripper_empty | lift_failed | slipped
+    width_after_close: float
+    width_after_lift: float
+
+
+def pick(sim, target_pos, hover: float = 0.15, grasp_dz: float = 0.0) -> PickResult:
+    """Pick up whatever is at target_pos (the block's center). Uses only
+    measurements the agent has: motion results and finger width."""
+    x, y, z = target_pos
+    nan = float("nan")
+
+    set_gripper(sim, FINGER_OPEN)
+    if not move_to(sim, [x, y, z + hover]).success:
+        return PickResult(False, "approach_failed", nan, nan)
+    if not move_to(sim, [x, y, z + grasp_dz]).success:
+        return PickResult(False, "descend_failed", nan, nan)
+
+    closed = set_gripper(sim, 0.0)
+    if closed.width < MIN_HELD_WIDTH:
+        return PickResult(False, "gripper_empty", closed.width, nan)
+
+    lifted = move_to(sim, [x, y, z + hover])
+    width_lift = gripper_width(sim)
+    if not lifted.success:
+        return PickResult(False, "lift_failed", closed.width, width_lift)
+    if width_lift < MIN_HELD_WIDTH:
+        return PickResult(False, "slipped", closed.width, width_lift)
+    return PickResult(True, "ok", closed.width, width_lift)
