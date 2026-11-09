@@ -1,0 +1,1 @@
+"""SightLoop: a vision-grounded LLM agent with a failure-aware evaluation harness."""
