@@ -2,6 +2,9 @@ import numpy as np
 import pybullet as p
 
 from sightloop.sim import IMG_H, IMG_W, MIN_BLOCK_SPACING, Simulator
+from sightloop.kinematics import (
+    ARM_JOINTS, HOME_POSE, ee_position, solve_ik, within_limits,
+)
 
 COLORS3 = ["red", "green", "yellow"]
 
@@ -66,3 +69,38 @@ def test_capture_shapes_and_cleanup():
     assert depth.shape == (IMG_H, IMG_W)
     sim.close()
     assert not p.isConnected(physicsClientId=sim.client)
+    
+
+def arm_angles(sim):
+    return [
+        p.getJointState(sim.robot_id, j, physicsClientId=sim.client)[0]
+        for j in ARM_JOINTS
+    ]
+
+
+def test_home_pose_is_inside_limits():
+    with Simulator() as sim:
+        assert within_limits(sim, HOME_POSE)
+
+
+def test_home_pose_holds_after_stepping():
+    with Simulator() as sim:
+        sim.step(240)
+        assert np.allclose(arm_angles(sim), HOME_POSE, atol=0.02)
+
+
+def test_ik_valid_for_every_block_across_seeds():
+    for seed in range(10):
+        with Simulator() as sim:
+            sim.spawn_blocks(COLORS3, seed=seed)
+            for body_id in sim.blocks.values():
+                pos, _ = p.getBasePositionAndOrientation(
+                    body_id, physicsClientId=sim.client
+                )
+                target = [pos[0], pos[1], pos[2] + 0.15]
+                q = solve_ik(sim, target)
+                assert within_limits(sim, q)
+                for joint, angle in zip(ARM_JOINTS, q):  # teleport, then check FK
+                    p.resetJointState(sim.robot_id, joint, angle, physicsClientId=sim.client)
+                err = np.linalg.norm(np.array(ee_position(sim)) - np.array(target))
+                assert err < 0.005

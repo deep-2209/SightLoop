@@ -2,6 +2,7 @@
 import numpy as np
 import pybullet as p
 import pybullet_data
+from sightloop.kinematics import set_home_pose
 
 TIME_STEP = 1.0 / 240.0
 
@@ -48,6 +49,7 @@ class Simulator:
             "franka_panda/panda.urdf", useFixedBase=True, physicsClientId=c
         )
         self.blocks = {}  # resetSimulation deleted every object; forget the ids
+        set_home_pose(self) # every episode starts from the same arm pose
 
     def step(self, n: int = 1) -> None:
         for _ in range(n):
