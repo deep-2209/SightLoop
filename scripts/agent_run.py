@@ -21,7 +21,7 @@ with Simulator() as sim:
     print("valid:", validation.valid, "errors:", validation.errors)
 
     if validation.valid:
-        log = execute(sim, parsed)
+        log = execute(sim, parsed, max_attempts=2)
         for s in log.steps:
             print(f"  {s.tool}{tuple(s.args.values())}: ok={s.ok} ({s.reason})")
         print("episode success:", log.success)

@@ -23,6 +23,7 @@ class StepLog:
     args: dict
     ok: bool
     reason: str
+    attempts: int = 1
 
 
 @dataclass
@@ -34,31 +35,36 @@ class EpisodeLog:
         return bool(self.steps) and all(s.ok for s in self.steps)
 
 
-def execute(sim, plan, perceive_fn=perceive) -> EpisodeLog:
-    """Run each step. Resolve colors via perceive_fn (pass ground_truth_state
-    for the oracle). Stop on the first failed step (no-recovery behavior)."""
+def execute(sim, plan, perceive_fn=perceive, max_attempts=1) -> EpisodeLog:
+    """Run each step, retrying up to max_attempts with fresh perception each
+    time. max_attempts=1 is the no-recovery baseline; >1 enables recovery.
+    Stops the episode on a step that fails all its attempts."""
     log = EpisodeLog()
     for call in plan:
         tool, args = call["tool"], call["args"]
-        seen = {o.color: o.position for o in perceive_fn(sim)}
-        color = args["color"]
-        if color not in seen:
-            log.steps.append(StepLog(tool, args, False, "target_not_perceived"))
-            break
+        ok, reason, attempts = False, "", 0
 
-        tx, ty, _ = seen[color]
-        if tool == "pick":
-            r = control.pick(sim, [tx, ty, TABLE_Z])
-        elif tool == "place_on":
-            r = control.place(sim, [tx, ty, STACK_Z])
-        elif tool == "place_relative":
-            dx, dy = DIR_OFFSET[args["direction"]]
-            r = control.place(sim, [tx + dx, ty + dy, TABLE_Z])
-        else:
-            log.steps.append(StepLog(tool, args, False, "unknown_tool"))
-            break
+        while attempts < max_attempts and not ok:
+            attempts += 1
+            seen = {o.color: o.position for o in perceive_fn(sim)}  # fresh look
+            color = args["color"]
+            if color not in seen:
+                ok, reason = False, "target_not_perceived"
+                continue
+            tx, ty, _ = seen[color]
+            if tool == "pick":
+                r = control.pick(sim, [tx, ty, TABLE_Z])
+            elif tool == "place_on":
+                r = control.place(sim, [tx, ty, STACK_Z])
+            elif tool == "place_relative":
+                dx, dy = DIR_OFFSET[args["direction"]]
+                r = control.place(sim, [tx + dx, ty + dy, TABLE_Z])
+            else:
+                ok, reason = False, "unknown_tool"
+                break
+            ok, reason = r.success, r.reason
 
-        log.steps.append(StepLog(tool, args, r.success, r.reason))
-        if not r.success:
-            break  # no-recovery: halt on first failure
+        log.steps.append(StepLog(tool, args, ok, reason, attempts))
+        if not ok:
+            break  # episode halts when a step exhausts its attempts
     return log
