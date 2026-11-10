@@ -90,10 +90,11 @@ class Simulator:
 
     def _render(self) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
         c = self.client
-        view = p.computeViewMatrix(CAM_EYE, CAM_TARGET, CAM_UP, physicsClientId=c)
-        proj = p.computeProjectionMatrixFOV(
-            CAM_FOV, IMG_W / IMG_H, CAM_NEAR, CAM_FAR, physicsClientId=c
-        )
+        # view = p.computeViewMatrix(CAM_EYE, CAM_TARGET, CAM_UP, physicsClientId=c)
+        # proj = p.computeProjectionMatrixFOV(
+        #     CAM_FOV, IMG_W / IMG_H, CAM_NEAR, CAM_FAR, physicsClientId=c
+        # )
+        view, proj = self.camera_matrices()
         w, h, rgba, depth, seg = p.getCameraImage(
             IMG_W, IMG_H, view, proj, renderer=p.ER_TINY_RENDERER, physicsClientId=c
         )
@@ -114,6 +115,14 @@ class Simulator:
         perception must never read this, or the perception metric is meaningless."""
         _, _, seg = self._render()
         return seg
+
+    def camera_matrices(self):
+        c = self.client
+        view = p.computeViewMatrix(CAM_EYE, CAM_TARGET, CAM_UP, physicsClientId=c)
+        proj = p.computeProjectionMatrixFOV(
+            CAM_FOV, IMG_W / IMG_H, CAM_NEAR, CAM_FAR, physicsClientId=c
+        )
+        return view, proj
 
     # ---- lifecycle -------------------------------------------------------
 
