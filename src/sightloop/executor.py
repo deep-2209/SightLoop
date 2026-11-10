@@ -70,6 +70,10 @@ def execute(sim, plan, perceive_fn=perceive, max_attempts=1, fault=None) -> Epis
                 ok, reason = False, "unknown_tool"
                 break
             ok, reason = r.success, r.reason
+            if (fault and fault.kind == "dropped" and step_index == fault.step and tool == "pick" and ok and attempts == 1):
+                control.set_gripper(sim, control.FINGER_OPEN)  # release mid-handling
+                sim.step(120)                                   # the block falls
+                ok, reason = False, "dropped"
 
         log.steps.append(StepLog(tool, args, ok, reason, attempts))
         if not ok:
