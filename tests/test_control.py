@@ -1,6 +1,7 @@
 import pybullet as p
+import numpy as np
 
-from sightloop.control import move_to, pick
+from sightloop.control import move_to, pick, place
 from sightloop.sim import Simulator
 
 
@@ -37,3 +38,21 @@ def test_pick_actually_lifts_the_block():
                 assert result.success, result
                 assert new[2] > 0.08, new
                 break  # one block per seed; the arm now holds it
+
+def test_pick_and_place_on_block_lands_near_target():
+    for seed in range(3):
+        with Simulator() as sim:
+            sim.spawn_blocks(["red", "green", "yellow"], seed=seed)
+            red, green = sim.blocks["red"], sim.blocks["green"]
+            rpos, _ = p.getBasePositionAndOrientation(red, physicsClientId=sim.client)
+            gpos, _ = p.getBasePositionAndOrientation(green, physicsClientId=sim.client)
+
+            assert pick(sim, gpos).success
+            target = [rpos[0], rpos[1], 0.075]  # green's center, on top of red
+            result = place(sim, target)
+            assert result.success, result
+
+            sim.step(240)  # let the stack settle or topple
+            final, _ = p.getBasePositionAndOrientation(green, physicsClientId=sim.client)
+            assert np.linalg.norm(np.array(final[:2]) - np.array(target[:2])) < 0.02
+            assert abs(final[2] - 0.075) < 0.02  # still on top, not fallen to ~0.025

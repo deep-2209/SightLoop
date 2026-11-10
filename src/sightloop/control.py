@@ -145,3 +145,35 @@ def pick(sim, target_pos, hover: float = 0.15, grasp_dz: float = 0.0) -> PickRes
     if width_lift < MIN_HELD_WIDTH:
         return PickResult(False, "slipped", closed.width, width_lift)
     return PickResult(True, "ok", closed.width, width_lift)
+
+
+RELEASED_WIDTH = 0.07  # m: fingers count as open above this (fully open is 0.08)
+
+@dataclass(frozen=True)
+class PlaceResult:
+    success: bool
+    reason: str  # ok | not_holding | approach_failed | descend_failed | release_failed | retreat_failed
+    width_after_release: float
+
+
+def place(sim, target_pos, hover: float = 0.15, release_dz: float = 0.005) -> PlaceResult:
+    """Put the held block with its CENTER at target_pos, release, and retreat.
+    Verifies motion and release only; whether the block landed right is for
+    the Verify stage (camera) to judge."""
+    x, y, z = target_pos
+    nan = float("nan")
+
+    if gripper_width(sim) < MIN_HELD_WIDTH:
+        return PlaceResult(False, "not_holding", nan)
+    if not move_to(sim, [x, y, z + hover]).success:
+        return PlaceResult(False, "approach_failed", nan)
+    if not move_to(sim, [x, y, z + release_dz]).success:
+        return PlaceResult(False, "descend_failed", nan)
+
+    opened = set_gripper(sim, FINGER_OPEN)
+    if opened.width < RELEASED_WIDTH:
+        return PlaceResult(False, "release_failed", opened.width)
+
+    if not move_to(sim, [x, y, z + hover]).success:
+        return PlaceResult(False, "retreat_failed", opened.width)
+    return PlaceResult(True, "ok", opened.width)
