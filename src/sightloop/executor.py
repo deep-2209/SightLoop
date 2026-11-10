@@ -3,6 +3,7 @@ from dataclasses import dataclass, field
 
 from sightloop import control
 from sightloop.perception import perceive
+from sightloop.faults import MISGRASP_OFFSET
 
 TABLE_Z = 0.025        # center height of a block on the table
 STACK_Z = 0.075        # center height of a block resting on another block
@@ -33,25 +34,31 @@ class EpisodeLog:
     @property
     def success(self) -> bool:
         return bool(self.steps) and all(s.ok for s in self.steps)
-
-
-def execute(sim, plan, perceive_fn=perceive, max_attempts=1) -> EpisodeLog:
+    
+def execute(sim, plan, perceive_fn=perceive, max_attempts=1, fault=None) -> EpisodeLog:
     """Run each step, retrying up to max_attempts with fresh perception each
-    time. max_attempts=1 is the no-recovery baseline; >1 enables recovery.
-    Stops the episode on a step that fails all its attempts."""
+        time. max_attempts=1 is the no-recovery baseline; >1 enables recovery.
+        Stops the episode on a step that fails all its attempts."""
     log = EpisodeLog()
-    for call in plan:
+    for step_index, call in enumerate(plan):
         tool, args = call["tool"], call["args"]
         ok, reason, attempts = False, "", 0
 
         while attempts < max_attempts and not ok:
             attempts += 1
-            seen = {o.color: o.position for o in perceive_fn(sim)}  # fresh look
+            seen = {o.color: o.position for o in perceive_fn(sim)}
             color = args["color"]
             if color not in seen:
                 ok, reason = False, "target_not_perceived"
                 continue
             tx, ty, _ = seen[color]
+
+            # transient mis-grasp: nudge the target sideways on the first
+            # attempt of the afflicted step, so the grasp misses once.
+            if (fault and fault.kind == "mis_grasp"
+                    and step_index == fault.step and attempts == 1):
+                tx += MISGRASP_OFFSET
+
             if tool == "pick":
                 r = control.pick(sim, [tx, ty, TABLE_Z])
             elif tool == "place_on":
@@ -66,5 +73,5 @@ def execute(sim, plan, perceive_fn=perceive, max_attempts=1) -> EpisodeLog:
 
         log.steps.append(StepLog(tool, args, ok, reason, attempts))
         if not ok:
-            break  # episode halts when a step exhausts its attempts
+            break
     return log
