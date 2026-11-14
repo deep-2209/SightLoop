@@ -61,6 +61,8 @@ def run_batch(tasks, conditions, llm_fn, out_path):
                 fault = Fault(fault.kind, fault.step, _primary_color(task))
             with Simulator() as sim:
                 sim.spawn_blocks(list(task.colors), seed=task.seed)
+                initial = {s.color: (s.position[0], s.position[1])
+                           for s in ground_truth_state(sim)}
                 inject_scene_fault(sim, fault)
                 perceive_fn = ground_truth_state if cond.use_oracle else perceive
                 colors = {o.color for o in perceive_fn(sim)}
@@ -72,7 +74,7 @@ def run_batch(tasks, conditions, llm_fn, out_path):
                     log = execute(sim, parsed, perceive_fn=perceive_fn,
                                   max_attempts=cond.max_attempts, fault=fault)
                     row["episode_success"] = log.success
-                    row["goal_success"] = check_goal(sim, task.goal)
+                    row["goal_success"] = check_goal(sim, task.goal, initial)
                     row["reasons"] = [s.reason for s in log.steps]
                     row["attempts"] = [s.attempts for s in log.steps]
                 else:

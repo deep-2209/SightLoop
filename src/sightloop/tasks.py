@@ -21,8 +21,9 @@ class Task:
     fault: Fault = None
 
 
-def check_goal(sim, goal) -> bool:
-    """Ground-truth task success, independent of the agent's own report."""
+def check_goal(sim, goal, initial=None) -> bool:
+    """Ground-truth task success. `initial` = {color: (x, y)} at spawn, used to
+    confirm the agent actually moved the block (not that it was already placed)."""
     if not goal:
         return False
     gt = {s.color: s.position for s in ground_truth_state(sim)}
@@ -33,8 +34,15 @@ def check_goal(sim, goal) -> bool:
     if goal["type"] == "relative":
         moved, ref = gt[goal["moved"]], gt[goal["reference"]]
         dx, dy = moved[0] - ref[0], moved[1] - ref[1]
-        return {"left": dy > 0.04, "right": dy < -0.04,
-                "back": dx > 0.04, "front": dx < -0.04}[goal["direction"]]
+        on_side = {"left": dy > 0.04, "right": dy < -0.04,
+                   "back": dx > 0.04, "front": dx < -0.04}[goal["direction"]]
+        if not on_side:
+            return False
+        if initial is not None:                       # require the agent moved it
+            ix, iy = initial[goal["moved"]]
+            if ((moved[0] - ix) ** 2 + (moved[1] - iy) ** 2) ** 0.5 < 0.03:
+                return False
+        return True
     return False
 
 

@@ -1,0 +1,64 @@
+{"task_id": "stack-000", "condition": "baseline", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [1, 1]}
+{"task_id": "stack-000", "condition": "oracle", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [1, 1]}
+{"task_id": "stack-000", "condition": "fault_norecover", "plan_valid": true, "episode_success": false, "goal_success": false, "reasons": ["gripper_empty"], "attempts": [1]}
+{"task_id": "stack-000", "condition": "fault_recover", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [2, 1]}
+{"task_id": "rel-001", "condition": "baseline", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [1, 1]}
+{"task_id": "rel-001", "condition": "oracle", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [1, 1]}
+{"task_id": "rel-001", "condition": "fault_norecover", "plan_valid": true, "episode_success": false, "goal_success": false, "reasons": ["gripper_empty"], "attempts": [1]}
+{"task_id": "rel-001", "condition": "fault_recover", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [2, 1]}
+{"task_id": "stack-002", "condition": "baseline", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [1, 1]}
+{"task_id": "stack-002", "condition": "oracle", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [1, 1]}
+{"task_id": "stack-002", "condition": "fault_norecover", "plan_valid": true, "episode_success": false, "goal_success": false, "reasons": ["gripper_empty"], "attempts": [1]}
+{"task_id": "stack-002", "condition": "fault_recover", "plan_valid": true, "episode_success": false, "goal_success": false, "reasons": ["ok", "target_not_perceived"], "attempts": [2, 2]}
+{"task_id": "rel-003", "condition": "baseline", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [1, 1]}
+{"task_id": "rel-003", "condition": "oracle", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [1, 1]}
+{"task_id": "rel-003", "condition": "fault_norecover", "plan_valid": true, "episode_success": false, "goal_success": false, "reasons": ["gripper_empty"], "attempts": [1]}
+{"task_id": "rel-003", "condition": "fault_recover", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [2, 1]}
+{"task_id": "stack-004", "condition": "baseline", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [1, 1]}
+{"task_id": "stack-004", "condition": "oracle", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [1, 1]}
+{"task_id": "stack-004", "condition": "fault_norecover", "plan_valid": true, "episode_success": false, "goal_success": false, "reasons": ["gripper_empty"], "attempts": [1]}
+{"task_id": "stack-004", "condition": "fault_recover", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [2, 1]}
+{"task_id": "rel-005", "condition": "baseline", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [1, 1]}
+{"task_id": "rel-005", "condition": "oracle", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [1, 1]}
+{"task_id": "rel-005", "condition": "fault_norecover", "plan_valid": true, "episode_success": false, "goal_success": false, "reasons": ["gripper_empty"], "attempts": [1]}
+{"task_id": "rel-005", "condition": "fault_recover", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [2, 1]}
+{"task_id": "stack-006", "condition": "baseline", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [1, 1]}
+{"task_id": "stack-006", "condition": "oracle", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [1, 1]}
+{"task_id": "stack-006", "condition": "fault_norecover", "plan_valid": true, "episode_success": false, "goal_success": false, "reasons": ["gripper_empty"], "attempts": [1]}
+{"task_id": "stack-006", "condition": "fault_recover", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [2, 1]}
+{"task_id": "rel-007", "condition": "baseline", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [1, 1]}
+{"task_id": "rel-007", "condition": "oracle", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [1, 1]}
+{"task_id": "rel-007", "condition": "fault_norecover", "plan_valid": true, "episode_success": false, "goal_success": false, "reasons": ["gripper_empty"], "attempts": [1]}
+{"task_id": "rel-007", "condition": "fault_recover", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [2, 1]}
+{"task_id": "stack-008", "condition": "baseline", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [1, 1]}
+{"task_id": "stack-008", "condition": "oracle", "plan_valid": true, "episode_success": false, "goal_success": true, "reasons": ["ok", "descend_failed"], "attempts": [1, 1]}
+{"task_id": "stack-008", "condition": "fault_norecover", "plan_valid": true, "episode_success": false, "goal_success": false, "reasons": ["gripper_empty"], "attempts": [1]}
+{"task_id": "stack-008", "condition": "fault_recover", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [2, 1]}
+{"task_id": "rel-009", "condition": "baseline", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [1, 1]}
+{"task_id": "rel-009", "condition": "oracle", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [1, 1]}
+{"task_id": "rel-009", "condition": "fault_norecover", "plan_valid": true, "episode_success": false, "goal_success": false, "reasons": ["gripper_empty"], "attempts": [1]}
+{"task_id": "rel-009", "condition": "fault_recover", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [2, 1]}
+{"task_id": "stack-010", "condition": "baseline", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [1, 1]}
+{"task_id": "stack-010", "condition": "oracle", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [1, 1]}
+{"task_id": "stack-010", "condition": "fault_norecover", "plan_valid": true, "episode_success": false, "goal_success": false, "reasons": ["gripper_empty"], "attempts": [1]}
+{"task_id": "stack-010", "condition": "fault_recover", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [2, 1]}
+{"task_id": "rel-011", "condition": "baseline", "plan_valid": true, "episode_success": false, "goal_success": false, "reasons": ["ok", "descend_failed"], "attempts": [1, 1]}
+{"task_id": "rel-011", "condition": "oracle", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [1, 1]}
+{"task_id": "rel-011", "condition": "fault_norecover", "plan_valid": true, "episode_success": false, "goal_success": false, "reasons": ["gripper_empty"], "attempts": [1]}
+{"task_id": "rel-011", "condition": "fault_recover", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [2, 1]}
+{"task_id": "stack-012", "condition": "baseline", "plan_valid": true, "episode_success": false, "goal_success": false, "reasons": ["ok", "target_not_perceived"], "attempts": [1, 1]}
+{"task_id": "stack-012", "condition": "oracle", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [1, 1]}
+{"task_id": "stack-012", "condition": "fault_norecover", "plan_valid": true, "episode_success": false, "goal_success": false, "reasons": ["gripper_empty"], "attempts": [1]}
+{"task_id": "stack-012", "condition": "fault_recover", "plan_valid": true, "episode_success": false, "goal_success": false, "reasons": ["ok", "target_not_perceived"], "attempts": [2, 2]}
+{"task_id": "rel-013", "condition": "baseline", "plan_valid": true, "episode_success": false, "goal_success": false, "reasons": ["slipped"], "attempts": [1]}
+{"task_id": "rel-013", "condition": "oracle", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [1, 1]}
+{"task_id": "rel-013", "condition": "fault_norecover", "plan_valid": true, "episode_success": false, "goal_success": false, "reasons": ["gripper_empty"], "attempts": [1]}
+{"task_id": "rel-013", "condition": "fault_recover", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [2, 1]}
+{"task_id": "stack-014", "condition": "baseline", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [1, 1]}
+{"task_id": "stack-014", "condition": "oracle", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [1, 1]}
+{"task_id": "stack-014", "condition": "fault_norecover", "plan_valid": true, "episode_success": false, "goal_success": false, "reasons": ["gripper_empty"], "attempts": [1]}
+{"task_id": "stack-014", "condition": "fault_recover", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [2, 1]}
+{"task_id": "rel-015", "condition": "baseline", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [1, 1]}
+{"task_id": "rel-015", "condition": "oracle", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [1, 1]}
+{"task_id": "rel-015", "condition": "fault_norecover", "plan_valid": true, "episode_success": false, "goal_success": false, "reasons": ["gripper_empty"], "attempts": [1]}
+{"task_id": "rel-015", "condition": "fault_recover", "plan_valid": true, "episode_success": true, "goal_success": true, "reasons": ["ok", "ok"], "attempts": [2, 1]}

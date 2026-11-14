@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from sightloop import control
 from sightloop.perception import perceive
 from sightloop.faults import MISGRASP_OFFSET
+from sightloop.kinematics import set_home_pose
 
 TABLE_Z = 0.025        # center height of a block on the table
 STACK_Z = 0.075        # center height of a block resting on another block
@@ -46,6 +47,10 @@ def execute(sim, plan, perceive_fn=perceive, max_attempts=1, fault=None) -> Epis
 
         while attempts < max_attempts and not ok:
             attempts += 1
+            if attempts > 1 and control.gripper_width(sim) < control.MIN_HELD_WIDTH:  # On a retry the arm from the failed attempt may be hovering over
+            # the workspace, occluding the top-down camera. If nothing is held,
+            # send it home so re-perception gets a clear view.
+                set_home_pose(sim)
             seen = {o.color: o.position for o in perceive_fn(sim)}
             color = args["color"]
             if color not in seen:
