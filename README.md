@@ -5,6 +5,8 @@ A vision-grounded LLM agent for tabletop robot manipulation, built as a
 measurement: *where* an LLM-driven manipulation agent fails (perception, planning,
 or control), and *whether* fault-aware recovery actually helps.
 
+**Project website: [sightloop-ten.vercel.app](https://sightloop-ten.vercel.app/)**
+
 <p align="center">
   <img src="scripts/gifs/success.gif" alt="success" width="45%">
   <img src="scripts/gifs/failure.gif" alt="failure" width="45%">
