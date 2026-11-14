@@ -3,6 +3,7 @@ import numpy as np
 import pybullet as p
 import pybullet_data
 from sightloop.kinematics import set_home_pose
+from PIL import Image
 
 TIME_STEP = 1.0 / 240.0
 
@@ -35,6 +36,9 @@ class Simulator:
         self.plane_id: int | None = None
         self.robot_id: int | None = None
         self.blocks: dict[str, int] = {}  # color name -> body id
+        self.record_every = 0
+        self._since_frame = 0
+        self.frames = []
         self.reset()
 
     def reset(self) -> None:
@@ -54,7 +58,25 @@ class Simulator:
     def step(self, n: int = 1) -> None:
         for _ in range(n):
             p.stepSimulation(physicsClientId=self.client)
+            if self.record_every:
+                self._since_frame += 1
+                if self._since_frame >= self.record_every:
+                    self._since_frame = 0
+                    rgb, _ = self.capture_rgbd()
+                    self.frames.append(rgb)
 
+
+    def start_recording(self, every: int = 15) -> None:
+        self.record_every = every
+        self._since_frame = 0
+        self.frames = []
+
+    def save_gif(self, path: str, fps: int = 20) -> None:
+        if not self.frames:
+            return
+        imgs = [Image.fromarray(f) for f in self.frames]
+        imgs[0].save(path, save_all=True, append_images=imgs[1:],
+                     duration=int(1000 / fps), loop=0)
     # ---- scene -----------------------------------------------------------
 
     def spawn_blocks(self, colors: list[str], seed: int) -> dict[str, int]:
