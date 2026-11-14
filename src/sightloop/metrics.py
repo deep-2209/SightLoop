@@ -52,3 +52,11 @@ def failure_taxonomy(rows, condition=None):
             continue
         counts[FAILURE_CATEGORY.get(reason, "other")] += 1
     return counts
+
+def ambiguity_scores(records):
+    """records: [{ambiguous: bool, clarified: bool}]. Returns (detection, false_alarm)."""
+    amb = [r for r in records if r["ambiguous"]]
+    clear = [r for r in records if not r["ambiguous"]]
+    detection = _mean(r["clarified"] for r in amb) if amb else 0.0
+    false_alarm = _mean(r["clarified"] for r in clear) if clear else 0.0
+    return detection, false_alarm
